@@ -49,13 +49,13 @@ def astar(graph, start: str, goal: str, time: str, heuristic_fn):
 def manhattan_distance(a, b):
     current_cords = a["start_pos"]
     end_cords = b["start_pos"]
-    return sum([abs(x1 - x2) for x1, x2 in zip(current_cords, end_cords)]) * 100
+    return sum([abs(x1 - x2) for x1, x2 in zip(current_cords, end_cords)]) * 69000 # obliczyłem na mapie XDD
 
 
 def euclidean_distance(a, b):
-    current_cords = a["start_pos"]
-    end_cords = b["start_pos"]
-    return math.sqrt(sum([(x1 - x2) ** 2 for x1, x2 in zip(current_cords, end_cords)])) * 100
+    current_cords = 51.14419429, 16.86596484
+    end_cords = 51.14516204, 16.949136
+    return math.sqrt(sum([(x1 - x2) ** 2 for x1, x2 in zip(current_cords, end_cords)])) * 69000
 
 
 def towncenter_distance(a, b):

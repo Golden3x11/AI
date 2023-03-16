@@ -11,7 +11,6 @@ def dijkstra(graph_dict, start, goal, time):
     while pq:
         curr_dist, curr_node = heapq.heappop(pq)
         line = prev_nodes[curr_node][1] if prev_nodes[curr_node] else None
-
         if curr_node == goal:
             break
         if curr_dist > distances[curr_node]:
@@ -22,7 +21,7 @@ def dijkstra(graph_dict, start, goal, time):
         for next_stop in filtered_stops:
             new_dist = next_stop.arrival
             neighbor = next_stop.name
-            if new_dist < distances[neighbor] or (new_dist <= distances[neighbor] and line == next_stop.line):
+            if new_dist < distances[neighbor] or (new_dist <= distances[neighbor] and line == next_stop.line and next_stop.name != curr_node):
                 distances[neighbor] = new_dist
                 prev_nodes[neighbor] = (curr_node, next_stop.line, next_stop.departure, next_stop.arrival)
                 heapq.heappush(pq, (new_dist, neighbor))
