@@ -1,5 +1,6 @@
 from dijkstra import shortest_path
 from astar import *
+from tabu_search import *
 from util import Cords, NextStop
 import util
 
@@ -34,38 +35,14 @@ for _, row in df.iterrows():
 
 util.update_start_pos(graph)
 
-distance, path = shortest_path(graph, "Lubiatów", "Kątna", "00:00:00")
-print("Shortest distance:", distance)
-print("Shortest path:", path)
 
-print()
+# shortest_path(graph, "Lubiatów", "Kątna", "00:00:00")
+# astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=haversine_distance)
 
-path, cost = astar(graph, "Lubiatów", "Kątna", "00:00:00", lambda a, b: manhattan_distance(a, b))
-print(f"Cost using Euclid's distance heuristic: {cost}")
-print(f"Path using Euclid's distance heuristic: {path}")
+shortest_path(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00")
+astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
 
-print()
+# shortest_path(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00")
+# astar(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
 
 
-distance, path = shortest_path(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00")
-print("Shortest distance:", distance)
-print("Shortest path:", path)
-
-print()
-
-
-path, cost = astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", lambda a, b: manhattan_distance(a, b))
-print(f"Cost using Euclid's distance heuristic: {cost}")
-print(f"Path using Euclid's distance heuristic: {path}")
-
-print()
-
-distance, path = shortest_path(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00")
-print("Shortest distance:", distance)
-print("Shortest path:", path)
-
-print()
-
-path, cost = astar(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00", lambda a, b: euclidean_distance(a, b))
-print(f"Cost using Euclid's distance heuristic: {cost}")
-print(f"Path using Euclid's distance heuristic: {path}")

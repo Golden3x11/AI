@@ -29,7 +29,7 @@ def dijkstra(graph_dict, start, goal, time):
 
     return distances, prev_nodes
 
-
+@util.print_results_djikstra
 def shortest_path(graph, start, goal, start_time):
     start_time = util.convert_to_seconds(start_time)
     distances, previous_nodes = dijkstra(graph, start, goal, start_time)
@@ -41,4 +41,4 @@ def shortest_path(graph, start, goal, start_time):
                      util.convert_to_time_string(current_node[3])))
         current_node = previous_nodes[current_node[0]]
     path.reverse()
-    return util.convert_to_time_string(distances[goal] - start_time), path
+    return (distances[goal] - start_time), path
