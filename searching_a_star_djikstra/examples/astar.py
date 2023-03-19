@@ -16,6 +16,8 @@ def astar(start, goal, neighbors_fn, heuristic_fn):
         for neighbor in neighbors_fn(current):
             new_cost = cost_so_far[current] + 1
             if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                if neighbor in cost_so_far:
+                    print('xd')
                 cost_so_far[neighbor] = new_cost
                 priority = new_cost + heuristic_fn(goal, neighbor)
                 heapq.heappush(front, (priority, neighbor))

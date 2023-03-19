@@ -3,6 +3,7 @@ import random
 
 import util
 
+
 def get_distances(graph, stops):
     distances = {}
     total = 0
@@ -20,7 +21,6 @@ def tabu_search(graph, start, stops: list):
     stops.append(start)
     n_stops = len(stops)
     distances, total = get_distances(graph, stops)
-    stops.remove(start)
 
     max_iterations = math.ceil(1.1 * (n_stops ** 2))
     turns_improved = 0
@@ -31,10 +31,10 @@ def tabu_search(graph, start, stops: list):
 
     current_solution = stops
     random.shuffle(current_solution)
-    current_solution.insert(0, start)
 
     best_solution = current_solution[:]
-    best_solution_cost = sum([distances[current_solution[i]][current_solution[(i+1)%n_stops]] for i in range(n_stops)])
+    best_solution_cost = sum(
+        [distances[current_solution[i]][current_solution[(i + 1) % n_stops]] for i in range(n_stops)])
 
     for iteration in range(max_iterations):
         if turns_improved > improve_thresh:
@@ -44,10 +44,10 @@ def tabu_search(graph, start, stops: list):
         tabu_candidate = (None, None)
 
         for i in range(n_stops):
-            for j in range(i+1, n_stops):
+            for j in range(i + 1, n_stops):
                 neighbor = current_solution[:]
                 neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
-                neighbor_cost = sum([distances[neighbor[i]][neighbor[(i+1)%n_stops]] for i in range(n_stops)])
+                neighbor_cost = sum([distances[neighbor[i]][neighbor[(i + 1) % n_stops]] for i in range(n_stops)])
                 if (i, j) not in tabu_list or neighbor_cost < aspiration_criteria:
                     if neighbor_cost < best_neighbor_cost:
                         best_neighbor = neighbor[:]
@@ -68,8 +68,8 @@ def tabu_search(graph, start, stops: list):
 
         print("Iteration {}: Best solution cost = {}".format(iteration, best_solution_cost))
 
+    start_id = best_solution.index(start)
+    result = best_solution[start_id:] + best_solution[:start_id]
     print("Best solution: {}".format(best_solution))
+    print("Best solution: {}".format(result))
     print("Best solution cost: {}".format(best_solution_cost))
-
-
-

@@ -2,10 +2,11 @@ import statistics
 from collections import namedtuple
 from functools import wraps
 import time
+from haversine import haversine
 from math import radians, cos, sin, asin, sqrt
 
 Cords = namedtuple("Cords", ["X", "Y"])
-NextStop = namedtuple("NextStop", ["name", "cords", "line", "departure", "arrival"])
+NextStop = namedtuple("NextStop", ["idx", "name", "cords", "line", "departure", "arrival"])
 
 
 def convert_to_seconds(time_str):
@@ -35,11 +36,12 @@ def timeit(func):
 
 
 def print_stops(path):
+    print('-' * 66)
     for stop in path:
         if stop != path[len(path) - 1]:
-            print(f"{stop[0]:<40} {stop[1]:<5} {stop[2]:<10} {stop[3]:<10}")
+            print(f"{stop[0]:<40}{stop[1]:<5}{stop[2]:<10}{stop[3]:<10}|")
         else:
-            print(path[len(path) - 1])
+            print(f"{path[len(path) - 1]:<65}|")
     print('-' * 66)
 
 
@@ -79,13 +81,5 @@ def update_start_pos(graph):
             data["start_pos"] = avg_pos
 
 
-# https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
-# distance between two points of earth in kilometres
 def haversine_distance(cords1, cords2):
-    lat1, lon1, lat2, lon2 = map(radians, [cords1[0], cords1[1], cords2[0], cords2[1]])
-    lon_distance = lon2 - lon1
-    lat_distance = lat2 - lat1
-    a = sin(lat_distance / 2) ** 2 + cos(lat1) * cos(lat2) * sin(lon_distance / 2) ** 2
-    c = 2 * asin(sqrt(a))
-    r = 6371
-    return c * r
+    return haversine(cords1, cords2)
