@@ -3,7 +3,7 @@ import random
 
 import util
 
-
+random.seed(9001)
 def get_distances(graph, stops):
     distances = {}
     total = 0
@@ -16,7 +16,13 @@ def get_distances(graph, stops):
 
     return distances, total
 
+def two_opt(current):
+    prev = random.randint(0, len(current) - 1 )
+    curr = random.randint(0, len(current) - 1)
+    current[curr], current[prev] = current[prev], current[curr]
+    return current, (prev, current)
 
+@util.timeit
 def tabu_search(graph, start, stops: list):
     stops.append(start)
     n_stops = len(stops)
@@ -26,8 +32,8 @@ def tabu_search(graph, start, stops: list):
     turns_improved = 0
     improve_thresh = 2 * math.floor(math.sqrt(max_iterations))
     tabu_list = []
-    tabu_tenure = n_stops
-    aspiration_criteria = (total / (n_stops ** 2)) * 2.2
+    # modification with tabu list size
+    tabu_tenure =  n_stops
 
     current_solution = stops
     random.shuffle(current_solution)
@@ -42,17 +48,30 @@ def tabu_search(graph, start, stops: list):
         best_neighbor = None
         best_neighbor_cost = float('inf')
         tabu_candidate = (None, None)
+        # aspiration criteria
+        aspiration_criteria = best_solution_cost * 0.5
 
+
+        # different approach for sampling
         for i in range(n_stops):
-            for j in range(i + 1, n_stops):
-                neighbor = current_solution[:]
-                neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
-                neighbor_cost = sum([distances[neighbor[i]][neighbor[(i + 1) % n_stops]] for i in range(n_stops)])
-                if (i, j) not in tabu_list or neighbor_cost < aspiration_criteria:
-                    if neighbor_cost < best_neighbor_cost:
-                        best_neighbor = neighbor[:]
-                        best_neighbor_cost = neighbor_cost
-                        tabu_candidate = (i, j)
+            neighbor, move = two_opt(current_solution[:])
+            neighbor_cost = sum([distances[neighbor[i]][neighbor[(i + 1) % n_stops]] for i in range(n_stops)])
+            if move not in tabu_list or neighbor_cost < aspiration_criteria:
+                if neighbor_cost < best_neighbor_cost:
+                    best_neighbor = neighbor[:]
+                    best_neighbor_cost = neighbor_cost
+                    tabu_candidate = move
+
+        # for i in range(n_stops):
+        #     for j in range(i + 1, n_stops):
+        #         neighbor = current_solution[:]
+        #         neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
+        #         neighbor_cost = sum([distances[neighbor[i]][neighbor[(i + 1) % n_stops]] for i in range(n_stops)])
+        #         if (i, j) not in tabu_list or neighbor_cost < aspiration_criteria:
+        #             if neighbor_cost < best_neighbor_cost:
+        #                 best_neighbor = neighbor[:]
+        #                 best_neighbor_cost = neighbor_cost
+        #                 tabu_candidate = (i, j)
 
         if best_neighbor is not None:
             current_solution = best_neighbor[:]

@@ -1,10 +1,10 @@
 import heapq
-import math
+
 import util
 
 
 @util.timeit
-def astar_xd_inner(graph, start: str, goal: str, time: int, heuristic_fn, line_change_value=False):
+def astar_xd_inner(graph, start: str, goal: str, time: int, heuristic_fn):
     goal_node = graph[goal]
     goal_lines = set([x.line for x in goal_node["next_stop"]])
     front = [(0, start)]
@@ -42,9 +42,8 @@ def astar_xd_inner(graph, start: str, goal: str, time: int, heuristic_fn, line_c
 @util.print_results_astar
 def astar_xd(graph, start: str, goal: str, time: str, heuristic_fn):
     time = util.convert_to_seconds(time)
-    line_change_condition = heuristic_fn.__name__ == 'line_change'
 
-    came_from, total_cost = astar_xd_inner(graph, start, goal, time, heuristic_fn, line_change_condition)
+    came_from, total_cost = astar_xd_inner(graph, start, goal, time, heuristic_fn)
 
     path = []
     current = came_from[goal]
@@ -61,16 +60,9 @@ def astar_xd(graph, start: str, goal: str, time: str, heuristic_fn):
     path.reverse()
     return total_cost, path
 
-def haversine_distance(goal, current, came_from_current, neighbor):
-    current_cords = goal["start_pos"]
-    end_cords = current["start_pos"]
-    return util.haversine_distance(current_cords, end_cords) * 250
-
 
 def line_change(goal, current, came_from_current, neighbor, goal_lines):
-    current_cords = goal["start_pos"]
-    end_cords = current["start_pos"]
     current_line = came_from_current[1] if came_from_current else None
-    is_line_changed = 0 if current_line == neighbor.line else 900
-    is_goal_line = 0 if neighbor.line in goal_lines else 900
-    return 2806 - len(current) + is_goal_line
+    is_line_not_changed = 0 if current_line == neighbor.line else 250
+    is_goal_line = 0 if neighbor.line in goal_lines else 250
+    return (2806 - len(current)) /10 + is_goal_line + is_line_not_changed
