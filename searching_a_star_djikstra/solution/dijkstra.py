@@ -23,7 +23,7 @@ def dijkstra(graph_dict, start, goal, time):
             neighbor = next_stop.name
             if new_dist < distances[neighbor] or (new_dist <= distances[neighbor] and line == next_stop.line and next_stop.name != curr_node):
                 distances[neighbor] = new_dist
-                prev_nodes[neighbor] = (curr_node, next_stop.line, next_stop.departure, next_stop.arrival)
+                prev_nodes[neighbor] = (curr_node, next_stop.line, next_stop.departure, next_stop.arrival, neighbor)
                 heapq.heappush(pq, (new_dist, neighbor))
 
 
@@ -33,12 +33,12 @@ def dijkstra(graph_dict, start, goal, time):
 def shortest_path(graph, start, goal, start_time):
     start_time = util.convert_to_seconds(start_time)
     distances, previous_nodes = dijkstra(graph, start, goal, start_time)
-    path = [goal]
+    path = []
     current_node = previous_nodes[goal]
     while current_node is not None:
         path.append((current_node[0], current_node[1],
                      util.convert_to_time_string(current_node[2]),
-                     util.convert_to_time_string(current_node[3])))
+                     util.convert_to_time_string(current_node[3]), current_node[4]))
         current_node = previous_nodes[current_node[0]]
     path.reverse()
     return (distances[goal] - start_time), path

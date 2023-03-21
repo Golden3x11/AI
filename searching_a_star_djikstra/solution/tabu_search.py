@@ -70,6 +70,5 @@ def tabu_search(graph, start, stops: list):
 
     start_id = best_solution.index(start)
     result = best_solution[start_id:] + best_solution[:start_id]
-    print("Best solution: {}".format(best_solution))
     print("Best solution: {}".format(result))
     print("Best solution cost: {}".format(best_solution_cost))

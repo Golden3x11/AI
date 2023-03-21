@@ -1,9 +1,10 @@
 import statistics
+import time
 from collections import namedtuple
 from functools import wraps
-import time
+from itertools import groupby
+
 from haversine import haversine
-from math import radians, cos, sin, asin, sqrt
 
 Cords = namedtuple("Cords", ["X", "Y"])
 NextStop = namedtuple("NextStop", ["idx", "name", "cords", "line", "departure", "arrival"])
@@ -36,13 +37,18 @@ def timeit(func):
 
 
 def print_stops(path):
-    print('-' * 66)
-    for stop in path:
-        if stop != path[len(path) - 1]:
-            print(f"{stop[0]:<40}{stop[1]:<5}{stop[2]:<10}{stop[3]:<10}|")
-        else:
-            print(f"{path[len(path) - 1]:<65}|")
-    print('-' * 66)
+    groups = groupby(path, key=lambda stop: stop[1])
+    print('-' * 106)
+    print(f"{'Line':<5}{'Start':<40}{'End':<40}{'Arrival':<10}{'Departure':<10}|")
+    print('-' * 106)
+
+    for line, group in groups:
+        group_list = list(group)
+        start = group_list[0]
+        end = group_list[-1]
+        print(f"{line:<5}{start[0]:<40}{end[4]:<40}{start[2]:<10}{end[3]:<10}|")
+
+    print('-' * 106)
 
 
 def print_results_astar(func):

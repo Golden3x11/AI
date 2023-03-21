@@ -1,5 +1,7 @@
 from dijkstra import shortest_path
 from astar import *
+from searching_a_star_djikstra.solution import astar_line_change
+from searching_a_star_djikstra.solution.astar_line_change import astar_xd
 from tabu_search import *
 from util import Cords, NextStop
 import util
@@ -40,17 +42,22 @@ util.update_start_pos(graph)
 shortest_path(graph, "Lubiatów", "Kątna", "00:00:00")
 astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=haversine_distance)
 astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=line_change)
+astar_xd(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=astar_line_change.line_change)
 
 shortest_path(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00")
 astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
 astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=line_change)
+astar_xd(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
 shortest_path(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00")
 astar(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
 astar(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=line_change)
+astar_xd(graph, "Żmudzka", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=astar_line_change.line_change)
+astar_xd(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
 shortest_path(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00")
 astar(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=haversine_distance)
 astar(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=line_change)
+astar_xd(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=astar_line_change.line_change)
 
-tabu_search(graph, "Reja", ["PL. GRUNWALDZKI", "ZACHODNIA (Stacja kolejowa)", "DWORZEC NADODRZE", "Żmudzka", "ZOO", "Zakładowa", "Bajana", "Wyszyńskiego"])
+# tabu_search(graph, "Reja", ["PL. GRUNWALDZKI", "ZACHODNIA (Stacja kolejowa)", "DWORZEC NADODRZE", "Żmudzka", "ZOO", "Zakładowa", "Bajana", "Wyszyńskiego"])
