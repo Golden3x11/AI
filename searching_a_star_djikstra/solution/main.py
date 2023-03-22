@@ -19,7 +19,7 @@ def load_data():
 
         start_pos = Cords(row["start_stop_lat"], row["start_stop_lon"])
         end_pos = Cords(row["end_stop_lat"], row["end_stop_lon"])
-        next_stop = NextStop(row[0], row["end_stop"], end_pos, row["line"],
+        next_stop = NextStop(row["end_stop"], end_pos, row["line"],
                              util.convert_to_seconds(row["departure_time"]),
                              util.convert_to_seconds(row["arrival_time"]))
 
@@ -49,8 +49,28 @@ def a_star(graph, start_stop, end_stop, time, optimization):
     elif optimization == "t":
         astar(graph, start_stop, end_stop, time, heuristic_fn=haversine_distance)
 
+def test_a_star_heuristics(graph, start_stop, end_stop, time):
+    heuristics = [manhattan_distance, haversine_distance, euclidean_distance, unidimensional_distance, cosine_distance, chebyshev_distance]
+    for heuristic in heuristics:
+        print(start_stop, end_stop, heuristic)
+        try:
+            astar(graph, start_stop, end_stop, time, heuristic_fn=heuristic)
+        except KeyError:
+            pass
+
+# to make it work uncomment some lines in util.timeit decorator
+def test_of_heuristics(n, graph):
+    df = pd.read_csv('exercise/unique_stops.csv')
+
+    for _ in range(n):
+        start_stop, end_stop = df["stop"].sample(2).tolist()
+        test_a_star_heuristics(graph, start_stop, end_stop, "10:00:00")
+    util.print_result()
+
 if __name__ == '__main__':
     graph = load_data()
+    # test_of_heuristics(1000, graph)
+
     start_stop = "Żmudzka"
     end_stop = "PL. GRUNWALDZKI"
     time = "16:00:00"
@@ -78,4 +98,4 @@ if __name__ == '__main__':
     astar(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=haversine_distance)
     astar_line(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=astar_line_change.line_change)
 
-    # tabu_search(graph, "Reja", L)
+    tabu_search(graph, "Reja", L)

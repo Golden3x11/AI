@@ -7,7 +7,8 @@ from itertools import groupby
 from haversine import haversine
 
 Cords = namedtuple("Cords", ["X", "Y"])
-NextStop = namedtuple("NextStop", ["idx", "name", "cords", "line", "departure", "arrival"])
+NextStop = namedtuple("NextStop", ["name", "cords", "line", "departure", "arrival"])
+a_star_times = {}
 
 
 def convert_to_seconds(time_str):
@@ -22,19 +23,29 @@ def convert_to_time_string(total_seconds):
 
     return '{:02d}:{:02d}:{:02d}'.format(h, m, s)
 
-
+# uncomment if want to check heuristics
 def timeit(func):
     @wraps(func)
     def timeit_wrapper(*args, **kwargs):
+        # heuristic_fn = args[4]
         start_time = time.perf_counter()
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
         total_time = end_time - start_time
+        # if heuristic_fn.__name__ not in a_star_times:
+        #     a_star_times[heuristic_fn.__name__] = []
+        #
+        # a_star_times[heuristic_fn.__name__].append(total_time)
         print(f'Function {func.__name__} Took {total_time:.4f} seconds')
         return result
 
     return timeit_wrapper
 
+
+def print_result():
+    sorted_items = sorted(a_star_times.items(), key=lambda x: sum(x[1]) / len(x[1]))
+    for key, value in sorted_items:
+        print(f"{key:<25} {sum(value) / len(value)}")
 
 def print_stops(path):
     groups = groupby(path, key=lambda stop: stop[1])

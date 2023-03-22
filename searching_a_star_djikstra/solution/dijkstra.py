@@ -10,7 +10,7 @@ def dijkstra(graph_dict, start, goal, time):
 
     while pq:
         curr_dist, curr_node = heapq.heappop(pq)
-        next_idx = prev_nodes[curr_node][5] + 1 if prev_nodes[curr_node] else None
+        line = prev_nodes[curr_node][1] if prev_nodes[curr_node] else None
         if curr_dist > distances[curr_node]:
             continue
 
@@ -18,9 +18,9 @@ def dijkstra(graph_dict, start, goal, time):
 
         for neighbor in filtered_stops:
             new_dist = neighbor.arrival - time
-            if new_dist < distances[neighbor.name] or (new_dist <= distances[neighbor.name] and next_idx == neighbor.idx):
+            if new_dist < distances[neighbor.name] or (new_dist <= distances[neighbor.name] and line == neighbor.line and neighbor.name != curr_node):
                 distances[neighbor.name] = new_dist
-                prev_nodes[neighbor.name] = (curr_node, neighbor.line, neighbor.departure, neighbor.arrival, neighbor.name, neighbor.idx)
+                prev_nodes[neighbor.name] = (curr_node, neighbor.line, neighbor.departure, neighbor.arrival, neighbor.name)
                 heapq.heappush(pq, (new_dist, neighbor.name))
 
 

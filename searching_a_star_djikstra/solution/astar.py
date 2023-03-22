@@ -1,4 +1,6 @@
 import heapq
+import math
+
 import util
 
 
@@ -12,11 +14,12 @@ def astar_inner(graph, start: str, goal: str, time: int, heuristic_fn):
 
     while front:
         _, current = heapq.heappop(front)
+        if current == goal:
+            break
+
         if current in extended:
             continue
         extended.add(current)
-        if current == goal:
-            break
         current_cost = cost_so_far[current]
 
         for neighbor in (n for n in graph[current]["next_stop"] if n.departure >= current_cost + time and n.name not in extended):
@@ -57,3 +60,40 @@ def haversine_distance(goal, current):
     end_cords = current["start_pos"]
     return util.haversine_distance(current_cords, end_cords) * 250
 
+# to equal value to haversine
+MANHATTAN_MULTIPLY = 16114
+def manhattan_distance(a, b):
+    a = a["start_pos"]
+    b = b["start_pos"]
+    return sum([abs(x - y) for x, y in zip(a, b)]) * MANHATTAN_MULTIPLY
+
+# to equal value to haversine
+EUCLIDEAN_MULTIPLY = 22767
+def euclidean_distance(a, b):
+    a = a["start_pos"]
+    b = b["start_pos"]
+    return math.sqrt(sum([(x - y) ** 2 for x, y in zip(a, b)])) * EUCLIDEAN_MULTIPLY
+
+# to equal value to haversine
+UNIDIMENSIONAL_MULTIPLY = 30876
+def unidimensional_distance(a, b):
+    a = a["start_pos"]
+    b = b["start_pos"]
+    return max([abs(x - y) for x, y in zip(a, b)]) * UNIDIMENSIONAL_MULTIPLY
+
+# to equal value to haversine
+COSINE_MULTIPLY = 11002895338
+def cosine_distance(a, b):
+    a = a["start_pos"]
+    b = b["start_pos"]
+    dot_product = sum(x * y for x, y in zip(a, b))
+    magnitude_a = math.sqrt(sum(x ** 2 for x in a))
+    magnitude_b = math.sqrt(sum(x ** 2 for x in b))
+    return 1 - (dot_product / (magnitude_a * magnitude_b)) * COSINE_MULTIPLY
+
+# to equal value to haversine
+CHEBYSHEV_MULTIPLY = 30876
+def chebyshev_distance(a, b):
+    a = a["start_pos"]
+    b = b["start_pos"]
+    return max(abs(x - y) for x, y in zip(a, b)) * CHEBYSHEV_MULTIPLY
