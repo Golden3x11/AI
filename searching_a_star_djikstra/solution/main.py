@@ -3,7 +3,7 @@ import pandas as pd
 from astar import *
 from dijkstra import shortest_path
 from searching_a_star_djikstra.solution import astar_line_change
-from searching_a_star_djikstra.solution.astar_line_change import astar_xd
+from searching_a_star_djikstra.solution.astar_line_change import astar_line
 from tabu_search import *
 from util import Cords, NextStop
 
@@ -45,7 +45,7 @@ def dijkstra(graph, start_stop, end_stop, time):
     shortest_path(graph, start_stop, end_stop, time)
 def a_star(graph, start_stop, end_stop, time, optimization):
     if optimization == "p":
-        astar_xd(graph, start_stop, end_stop, time, heuristic_fn=astar_line_change.line_change)
+        astar_line(graph, start_stop, end_stop, time, heuristic_fn=astar_line_change.line_change)
     elif optimization == "t":
         astar(graph, start_stop, end_stop, time, heuristic_fn=haversine_distance)
 
@@ -64,18 +64,18 @@ if __name__ == '__main__':
 
     shortest_path(graph, "Lubiatów", "Kątna", "00:00:00")
     astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=haversine_distance)
-    astar_xd(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=astar_line_change.line_change)
+    astar_line(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00")
     astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
-    astar_xd(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=astar_line_change.line_change)
+    astar_line(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00")
     astar(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=haversine_distance)
-    astar_xd(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=astar_line_change.line_change)
+    astar_line(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00")
     astar(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=haversine_distance)
-    astar_xd(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=astar_line_change.line_change)
+    astar_line(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00", heuristic_fn=astar_line_change.line_change)
 
     # tabu_search(graph, "Reja", L)

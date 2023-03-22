@@ -4,46 +4,42 @@ import util
 
 
 @util.timeit
-def astar_xd_inner(graph, start: str, goal: str, time: int, heuristic_fn):
-    goal_node = graph[goal]
-    goal_lines = set([x.line for x in goal_node["next_stop"]])
+def astar_line_inner(graph, start: str, goal: str, time: int, heuristic_fn):
+    goal_lines_dict = {x.line: True for x in graph[goal]["next_stop"]}
     front = [(0, start)]
     came_from = {start: None}
-    cost_so_far = {start: 0}
+    cost_so_far = {start: (0, 0, 0)}
     extended = set()
 
     while front:
         _, current = heapq.heappop(front)
+        if current in extended:
+            continue
         extended.add(current)
         if current == goal:
             break
-        current_cost = cost_so_far[current]
-        next_idx = came_from[current][5] + 1 if came_from[current] else None
+        current_cost = cost_so_far[current][0]
+        current_time = cost_so_far[current][1]
+        line = came_from[current][1] if came_from[current] else None
 
-        filtered_stops = [n for n in graph[current]["next_stop"] if n.departure >= current_cost + time]
-        filtered_stops_line = [n for n in filtered_stops if n.line in goal_lines]
-
-        if filtered_stops_line:
-            filtered_stops = filtered_stops_line
+        filtered_stops = [n for n in graph[current]["next_stop"] if n.departure >= current_time + time and n.name not in extended]
 
         for neighbor in filtered_stops:
-            if neighbor.name in extended:
-                continue
-            new_cost = neighbor.arrival - time
+            new_cost = (0 if line == neighbor.line else 250) + current_cost
+            new_time = neighbor.arrival - time
+            priority = new_cost + new_time + heuristic_fn(graph[neighbor.name], neighbor, goal_lines_dict)
 
-            if neighbor.name not in cost_so_far or new_cost < cost_so_far[neighbor.name] or next_idx == neighbor.idx:
-                cost_so_far[neighbor.name] = new_cost
-                came_from[neighbor.name] = current, neighbor.line, neighbor.departure, neighbor.arrival, neighbor.name, neighbor.idx
-                priority = new_cost + heuristic_fn(goal_node, graph[neighbor.name], came_from[current], neighbor, goal_lines)
+            if neighbor.name not in cost_so_far or priority < cost_so_far[neighbor.name][2] or priority == cost_so_far[neighbor.name][2] and new_time < cost_so_far[neighbor.name][1]:
+                cost_so_far[neighbor.name] = new_cost, new_time, priority
+                came_from[neighbor.name] = current, neighbor.line, neighbor.departure, neighbor.arrival, neighbor.name
                 heapq.heappush(front, (priority, neighbor.name))
-
-    return came_from, cost_so_far[goal]
+    return came_from, cost_so_far[goal][1]
 
 @util.print_results_astar
-def astar_xd(graph, start: str, goal: str, time: str, heuristic_fn):
+def astar_line(graph, start: str, goal: str, time: str, heuristic_fn):
     time = util.convert_to_seconds(time)
 
-    came_from, total_cost = astar_xd_inner(graph, start, goal, time, heuristic_fn)
+    came_from, total_cost = astar_line_inner(graph, start, goal, time, heuristic_fn)
 
     path = []
     current = came_from[goal]
@@ -61,8 +57,6 @@ def astar_xd(graph, start: str, goal: str, time: str, heuristic_fn):
     return total_cost, path
 
 
-def line_change(goal, current, came_from_current, neighbor, goal_lines):
-    current_line = came_from_current[1] if came_from_current else None
-    is_line_not_changed = 0 if current_line == neighbor.line else 250
-    is_goal_line = 0 if neighbor.line in goal_lines else 250
-    return (2806 - len(current)) /10 + is_goal_line + is_line_not_changed
+def line_change(neighbor_node, neighbor, goal_lines_dict):
+    is_goal_line = 0 if neighbor.line in goal_lines_dict else 900
+    return (2806 - len(neighbor_node["next_stop"])) /10 + is_goal_line

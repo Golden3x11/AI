@@ -12,15 +12,14 @@ def astar_inner(graph, start: str, goal: str, time: int, heuristic_fn):
 
     while front:
         _, current = heapq.heappop(front)
+        if current in extended:
+            continue
         extended.add(current)
         if current == goal:
             break
         current_cost = cost_so_far[current]
-        filtered_stops = (n for n in graph[current]["next_stop"] if n.departure >= current_cost + time)
 
-        for neighbor in filtered_stops:
-            if neighbor.name in extended:
-                continue
+        for neighbor in (n for n in graph[current]["next_stop"] if n.departure >= current_cost + time and n.name not in extended):
             new_cost = neighbor.arrival - time
 
             if neighbor.name not in cost_so_far or new_cost < cost_so_far[neighbor.name]:
