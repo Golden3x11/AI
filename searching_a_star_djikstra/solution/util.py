@@ -9,6 +9,7 @@ from haversine import haversine
 Cords = namedtuple("Cords", ["X", "Y"])
 NextStop = namedtuple("NextStop", ["name", "cords", "line", "departure", "arrival"])
 a_star_times = {}
+solution = {}
 
 
 def convert_to_seconds(time_str):
@@ -34,8 +35,10 @@ def timeit(func):
         total_time = end_time - start_time
         # if heuristic_fn.__name__ not in a_star_times:
         #     a_star_times[heuristic_fn.__name__] = []
+        #     solution[heuristic_fn.__name__] = []
         #
         # a_star_times[heuristic_fn.__name__].append(total_time)
+        # solution[heuristic_fn.__name__].append(result[1])
         print(f'Function {func.__name__} Took {total_time:.4f} seconds')
         return result
 
@@ -45,7 +48,8 @@ def timeit(func):
 def print_result():
     sorted_items = sorted(a_star_times.items(), key=lambda x: sum(x[1]) / len(x[1]))
     for key, value in sorted_items:
-        print(f"{key:<25} {sum(value) / len(value)}")
+        result = solution[key]
+        print(f"{key:<25} : {round(sum(value) / len(value),11):<12} : {sum(result)/ len(result)}")
 
 def print_stops(path):
     groups = groupby(path, key=lambda stop: stop[1])

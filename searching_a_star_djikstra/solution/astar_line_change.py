@@ -22,12 +22,12 @@ def astar_line_inner(graph, start: str, goal: str, time: int, heuristic_fn):
         current_time = cost_so_far[current][1]
         line = came_from[current][1] if came_from[current] else None
 
-        filtered_stops = [n for n in graph[current]["next_stop"] if n.departure >= current_time + time and n.name not in extended]
+        filtered_stops = (n for n in graph[current]["next_stop"] if n.departure >= current_time + time and n.name not in extended)
 
         for neighbor in filtered_stops:
             new_cost = (0 if line == neighbor.line else 250) + current_cost
             new_time = neighbor.arrival - time
-            priority = new_cost + new_time + heuristic_fn(graph[neighbor.name], neighbor, goal_lines_dict)
+            priority = new_cost + new_time/2 + heuristic_fn(graph[neighbor.name], neighbor, goal_lines_dict)
 
             if neighbor.name not in cost_so_far or priority < cost_so_far[neighbor.name][2] or priority == cost_so_far[neighbor.name][2] and new_time < cost_so_far[neighbor.name][1]:
                 cost_so_far[neighbor.name] = new_cost, new_time, priority

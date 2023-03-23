@@ -69,7 +69,7 @@ def test_of_heuristics(n, graph):
 
 if __name__ == '__main__':
     graph = load_data()
-    # test_of_heuristics(1000, graph)
+    # test_of_heuristics(10000, graph)
 
     start_stop = "Żmudzka"
     end_stop = "PL. GRUNWALDZKI"
@@ -81,17 +81,22 @@ if __name__ == '__main__':
     dijkstra(graph, start_stop, end_stop, time)
     a_star(graph, start_stop, end_stop, time, optimization)
     a_star(graph, start_stop, end_stop, time, "t")
+    astar(graph, start_stop, end_stop, time, heuristic_fn=chebyshev_distance)
+
 
     shortest_path(graph, "Lubiatów", "Kątna", "00:00:00")
     astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=haversine_distance)
+    astar(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=chebyshev_distance)
     astar_line(graph, "Lubiatów", "Kątna", "00:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00")
     astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=haversine_distance)
+    astar(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=chebyshev_distance)
     astar_line(graph, "Sowia", "PL. GRUNWALDZKI", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00")
     astar(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=haversine_distance)
+    astar(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=chebyshev_distance)
     astar_line(graph, "Żmudzka", "Kliniki - Politechnika Wrocławska", "16:00:00", heuristic_fn=astar_line_change.line_change)
 
     shortest_path(graph, "GALERIA DOMINIKAŃSKA", "PL. GRUNWALDZKI", "16:27:00")
