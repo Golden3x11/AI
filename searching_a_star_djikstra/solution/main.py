@@ -58,7 +58,7 @@ def test_a_star_heuristics(graph, start_stop, end_stop, time):
         except KeyError:
             pass
 
-# to make it work uncomment some lines in util.timeit decorator
+# to make it work uncomment some lines in util.py.timeit decorator
 def test_of_heuristics(n, graph):
     df = pd.read_csv('exercise/unique_stops.csv')
 
