@@ -37,7 +37,7 @@ def play_game():
             move = get_computer_move(board, reversi.SYMBOL_X)
         else:
             print("Player ⚫'s turn.")
-            move = get_user_move(board, reversi.SYMBOL_O)
+            move = get_computer_move(board, reversi.SYMBOL_O)
             
         if move:
             print(f"Move: ({move[0]}, {move[1]})")

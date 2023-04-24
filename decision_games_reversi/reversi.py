@@ -1,10 +1,10 @@
 BOARD_SIZE = 8
 ALL_POSSIBLE_DIRECTIONS = [(1, 0), (1, 1), (1, -1), (0, 1), (0, -1), (-1, 0), (-1, 1), (-1, -1)]
 CORNERS = [(0, 0), (0, BOARD_SIZE - 1), (BOARD_SIZE - 1, 0), (BOARD_SIZE - 1, BOARD_SIZE - 1)]
-EDGES = [(0, i) for i in range(1, BOARD_SIZE - 1)] + \
-        [(BOARD_SIZE - 1, i) for i in range(1, BOARD_SIZE - 1)] + \
-        [(i, 0) for i in range(1, BOARD_SIZE - 1)] + \
-        [(i, BOARD_SIZE - 1) for i in range(1, BOARD_SIZE - 1)]
+EDGES = [(0, i) for i in range(2, BOARD_SIZE - 2)] + \
+        [(BOARD_SIZE - 1, i) for i in range(2, BOARD_SIZE - 2)] + \
+        [(i, 0) for i in range(2, BOARD_SIZE - 2)] + \
+        [(i, BOARD_SIZE - 1) for i in range(2, BOARD_SIZE - 2)]
 BOARD = [
     # 0  1  2  3  4  5  6  7  x/ y
     [0, 0, 0, 0, 0, 0, 0, 0],  # 0
@@ -91,34 +91,79 @@ def is_game_over(board):
     else:
         return True
 
-def corners(board, symbol):
-    corner_count = 0
+def corners(board, max_symbol):
+    min_symbol = SYMBOL_O if max_symbol == SYMBOL_X else SYMBOL_X
+    corner_count_max = 0
+    corner_count_min = 0
     for x, y in CORNERS:
-        if board[y][x] == symbol:
-            corner_count += 1
-    return corner_count
+        if board[y][x] == max_symbol:
+            corner_count_max += 1
+        elif board[y][x] == min_symbol:
+            corner_count_min += 1
+    return calc_percent(corner_count_max, corner_count_min)
 
 
-def edges(board, symbol):
-    edge_count = 0
+def edges(board, max_symbol):
+    min_symbol = SYMBOL_O if max_symbol == SYMBOL_X else SYMBOL_X
+    edge_count_max = 0
+    edge_count_min = 0
     for x, y in EDGES:
-        if board[y][x] == symbol:
-            edge_count += 1
-    return edge_count
+        if board[y][x] == max_symbol:
+            edge_count_max += 1
+        elif board[y][x] == min_symbol:
+            edge_count_min +=1
+    return calc_percent(edge_count_max, edge_count_min)
 
 
 def coin_parity(board, symbol):
-    other_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
+    min_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
     score = calculate_score(board)
-    return score[symbol] - score[other_symbol]
+    return calc_percent(score[symbol], score[min_symbol])
 
+def mobility(board, max_symbol):
+    min_symbol = SYMBOL_O if max_symbol == SYMBOL_X else SYMBOL_X
+    moves_max = len(calc_possible_moves(board, max_symbol))
+    moves_min = len(calc_possible_moves(board, min_symbol))
+    return calc_percent(moves_max, moves_min)
 
-def board_score(board, symbol):
+def calc_percent(score_max, score_min):
+    if (score_min + score_max) != 0:
+        return 100 * (score_max - score_min) / (score_max + score_min)
+    return 0
+
+def board_score(board, max_symbol):
     score = 0
-    score += 10 * coin_parity(board, symbol)
-    score += 500 * corners(board, symbol)
-    score += 100 * edges(board, symbol)
+    score += 30 * corners(board, max_symbol)
+    score += 5 * mobility(board, max_symbol)
+    score += 25 * coin_parity(board, max_symbol)
+    score += 10 * edges(board, max_symbol)
     return score
+
+#
+# def stability_heuristic(board, max_symbol):
+#     stability_max = 0
+#     stability_min = 0
+#     min_symbol = SYMBOL_O if max_symbol == SYMBOL_X else SYMBOL_X
+#     for x in range(8):
+#         for y in range(8):
+#             if board[y][x] == max_symbol:
+#                 stability_max += count_stable_pieces(board, x, y, max_symbol, min_symbol)
+#             elif board[y][x] == max_symbol:
+#                 stability_min += count_stable_pieces(board, x, y, min_symbol, max_symbol)
+#     return calc_percent(stability_max, stability_min)
+#
+# def count_stable_pieces(board, x, y, symbol, other_symbol):
+#     stable = 1
+#     for x_dir, y_dir in ALL_POSSIBLE_DIRECTIONS:
+#         x_curr, y_curr = x + x_dir, y + y_dir
+#
+#         while is_on_board(x_curr, y_curr) and board[y_curr][x_curr] == other_symbol:
+#             x_curr += x_dir
+#             y_curr += y_dir
+#             return 0
+#
+#     return stable
+
 
 
 
