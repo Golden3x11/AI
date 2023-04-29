@@ -1,6 +1,6 @@
-import reversi
-import alpha_beta
-import minimax
+from decision_games_reversi import reversi
+from decision_games_reversi import alpha_beta
+from decision_games_reversi import minimax
 
 
 def get_computer_move(board, symbol):

@@ -1,8 +1,8 @@
 import copy
 
 import pygame
-import reversi
-import alpha_beta
+from decision_games_reversi import reversi
+from decision_games_reversi import alpha_beta
 
 # Define constants for the game screen
 SCREEN_WIDTH = 480
@@ -83,10 +83,8 @@ def draw_end_game(score):
 def get_move(board, symbol):
     """Get the move from either the user or computer."""
     if symbol == reversi.SYMBOL_X:
-        print("Player ⚪'s turn:")
         move = get_user_move(board, symbol)
     else:
-        print("Player ⚫'s turn.")
         move = alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
 
     return move

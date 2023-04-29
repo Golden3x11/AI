@@ -1,7 +1,6 @@
 import copy
-
 from decision_games_reversi.util import timeit
-from reversi import calc_possible_moves, make_move, is_game_over
+from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over
 
 MAX_DEPTH_OF_TREE = 3
 MAX_SYMBOL = None
