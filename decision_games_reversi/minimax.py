@@ -21,7 +21,6 @@ def get_move(board, symbol, score_heuristic):
         board_copy = make_move(board_copy, symbol, move)
         score, visited = _minimax(board_copy, other_symbol, 1, False, score_heuristic)
         nodes_visited += visited
-        print(score, move)
         if score > best_score:
             best_move = move
             best_score = score

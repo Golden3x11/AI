@@ -87,7 +87,7 @@ def get_move(board, symbol):
         move = get_user_move(board, symbol)
     else:
         print("Player ⚫'s turn.")
-        move = alpha_beta.get_move(board, symbol, reversi.board_score)
+        move = alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
 
     return move
 
