@@ -1,8 +1,8 @@
 import copy
 from decision_games_reversi.util import timeit
-from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over
+from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over, SYMBOL_O, SYMBOL_X
 
-MAX_DEPTH_OF_TREE = 3
+MAX_DEPTH_OF_TREE = 5
 MAX_SYMBOL = None
 
 @timeit
@@ -10,7 +10,7 @@ def get_move(board, symbol, score_heuristic):
     possible_moves = calc_possible_moves(board, symbol)
     best_move = None
     best_score = float('-inf')
-    other_symbol = 2 if symbol == 1 else 1
+    other_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
     nodes_visited = 0
     global MAX_SYMBOL
     MAX_SYMBOL = symbol
@@ -29,7 +29,7 @@ def get_move(board, symbol, score_heuristic):
 
 def _minimax(board, symbol, depth, is_max_round, score_heuristic):
     possible_moves = calc_possible_moves(board, symbol)
-    other_symbol = 2 if symbol == 1 else 1
+    other_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
     nodes_visited = 1
 
     if not possible_moves:

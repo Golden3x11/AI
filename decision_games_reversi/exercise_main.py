@@ -1,10 +1,10 @@
-from decision_games_reversi import alpha_beta
+from decision_games_reversi import alpha_beta, heuristics
 from decision_games_reversi import reversi
 from decision_games_reversi import minimax
 
 
 def get_computer_move(board, symbol):
-    return alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
+    return alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
 
 
 def play_game():

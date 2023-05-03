@@ -1,8 +1,8 @@
 import copy
 from decision_games_reversi.util import timeit
-from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over
+from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over, SYMBOL_O, SYMBOL_X
 
-MAX_DEPTH_OF_TREE = 3
+MAX_DEPTH_OF_TREE = 5
 
 MAX_SYMBOL = None
 @timeit
@@ -10,28 +10,33 @@ def get_move(board, symbol, score_heuristic):
     possible_moves = calc_possible_moves(board, symbol)
     best_move = None
     best_score = float('-inf')
-    other_symbol = 2 if symbol == 1 else 1
+    other_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
     nodes_visited = 0
     global MAX_SYMBOL
     MAX_SYMBOL = symbol
 
+    alpha = float('-inf')
 
     for move in possible_moves:
         board_copy = copy.deepcopy(board)
         board_copy = make_move(board_copy, symbol, move)
-        score, visited = _alpha_beta(board_copy, other_symbol, 1, False, score_heuristic)
+        score, visited = _alpha_beta(board_copy, other_symbol, 1, False, score_heuristic, alpha)
         nodes_visited += visited
 
         if score > best_score:
             best_move = move
             best_score = score
+
+        # it's max round only
+        alpha = max(alpha, best_score)
+
     print(f'Nodes visited: {nodes_visited}')
     return best_move
 
 
 def _alpha_beta(board, symbol, depth, is_max_round, score_heuristic, alpha=float('-inf'), beta=float('inf')):
     possible_moves = calc_possible_moves(board, symbol)
-    other_symbol = 2 if symbol == 1 else 1
+    other_symbol = SYMBOL_O if symbol == SYMBOL_X else SYMBOL_X
     nodes_visited = 1
 
 

@@ -1,14 +1,14 @@
-from decision_games_reversi import reversi
+from decision_games_reversi import reversi, heuristics
 from decision_games_reversi import alpha_beta
 from decision_games_reversi import minimax
 
 
 def get_computer_move(board, symbol):
-    return alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
+    return alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
 
 
 def get_user_move(board, symbol):
-    move = alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
+    move = alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
     print("Suggested move:", (move[0], move[1]))
     valid_moves = reversi.calc_possible_moves(board, symbol)
     print("Valid moves:", [(x, y) for x, y, flipped in valid_moves])
@@ -37,7 +37,7 @@ def play_game():
             move = get_computer_move(board, reversi.SYMBOL_X)
         else:
             print("Player ⚫'s turn.")
-            move = get_computer_move(board, reversi.SYMBOL_O)
+            move = get_user_move(board, reversi.SYMBOL_O)
             
         if move:
             print(f"Move: ({move[0]}, {move[1]})")

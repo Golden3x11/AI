@@ -1,11 +1,11 @@
 import json
 import sys
 
-from decision_games_reversi import alpha_beta, reversi
+from decision_games_reversi import alpha_beta, reversi, heuristics
 
 
 def get_computer_move(board, symbol):
-    return alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
+    return alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
 
 
 def play_one_move(board, current_player):

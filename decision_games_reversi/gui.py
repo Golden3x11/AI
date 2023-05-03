@@ -1,7 +1,7 @@
 import copy
 
 import pygame
-from decision_games_reversi import reversi
+from decision_games_reversi import reversi, heuristics
 from decision_games_reversi import alpha_beta
 
 # Define constants for the game screen
@@ -85,7 +85,7 @@ def get_move(board, symbol):
     if symbol == reversi.SYMBOL_X:
         move = get_user_move(board, symbol)
     else:
-        move = alpha_beta.get_move(board, symbol, reversi.adaptive_strategy)
+        move = alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
 
     return move
 
