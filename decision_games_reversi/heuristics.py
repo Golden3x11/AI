@@ -90,7 +90,11 @@ def board_current_score(board, max_symbol, weights):
 
 
 def stable_strategy(board, max_symbol):
-    weights = {"corners": 30, "mobility": 5, "coin_parity": 25, "edges": 10, "stability": 25}
+    weights = {"corners": 30,
+               "mobility": 5,
+               "coin_parity": 25,
+               "edges": 10,
+               "stability": 25}
     return board_current_score(board, max_symbol, weights)
 
 
@@ -105,20 +109,21 @@ def adaptive_strategy(board, max_symbol):
         weights = {"corners": 20, "mobility": 20, "coin_parity": 20, "edges": 15, "stability": 25}
     else:
         # corners and stability are the most important
-        weights = {"corners": 35, "mobility": 10, "coin_parity": 20, "edges": 10, "stability": 25}
+        weights = {"corners": 35, "mobility": 5, "coin_parity": 20, "edges": 15, "stability": 25}
     return board_current_score(board, max_symbol, weights)
 
 
 STATIC_BOARD = [
-    [4, -3, 2, 2, 2, 2, -3, 4],
+    [ 4, -3,  2,  2,  2,  2, -3,  4],
     [-3, -4, -1, -1, -1, -1, -4, -3],
-    [2, -1, 1, 0, 0, 1, -1, 2],
-    [2, -1, 0, 1, 1, 0, -1, 2],
-    [2, -1, 0, 1, 1, 0, -1, 2],
-    [2, -1, 1, 0, 0, 1, -1, 2],
+    [ 2, -1,  1,  0,  0,  1, -1,  2],
+    [ 2, -1,  0,  1,  1,  0, -1,  2],
+    [ 2, -1,  0,  1,  1,  0, -1,  2],
+    [ 2, -1,  1,  0,  0,  1, -1,  2],
     [-3, -4, -1, -1, -1, -1, -4, -3],
-    [4, -3, 2, 2, 2, 2, -3, 4]
+    [ 4, -3,  2,  2,  2,  2, -3,  4]
 ]
+
 
 
 def static_strategy(board, max_symbol):

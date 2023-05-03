@@ -1,6 +1,8 @@
 import time
 from functools import wraps
 
+import matplotlib.pyplot as plt
+
 
 def timeit(func):
     @wraps(func)
@@ -13,3 +15,13 @@ def timeit(func):
         return result
 
     return timeit_wrapper
+
+
+def print_moves_graph(title, moves_list):
+    values = moves_list[1:]
+    moves = [i + 1 for i in range(len(values))]
+    plt.plot(moves, values)
+    plt.title(title)
+    plt.xlabel('Move number')
+    plt.ylabel('Number of nodes visited')
+    plt.show()

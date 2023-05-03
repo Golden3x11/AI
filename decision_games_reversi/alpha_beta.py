@@ -2,7 +2,7 @@ import copy
 from decision_games_reversi.util import timeit
 from decision_games_reversi.reversi import calc_possible_moves, make_move, is_game_over, SYMBOL_O, SYMBOL_X
 
-MAX_DEPTH_OF_TREE = 5
+MAX_DEPTH_OF_TREE = 4
 
 MAX_SYMBOL = None
 @timeit

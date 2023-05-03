@@ -83,7 +83,7 @@ def draw_end_game(score):
 def get_move(board, symbol):
     """Get the move from either the user or computer."""
     if symbol == reversi.SYMBOL_X:
-        move = get_user_move(board, symbol)
+        move = alpha_beta.get_move(board, symbol, heuristics.stable_strategy)
     else:
         move = alpha_beta.get_move(board, symbol, heuristics.adaptive_strategy)
 
